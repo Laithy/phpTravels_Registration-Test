@@ -27,7 +27,7 @@ public class RegistrationPage {
     private void selectOption (WebElement wbButton, List<WebElement> wb , String option) {
         for (WebElement prnt : wb){
             String optionText = prnt.getText();
-            if (optionText.contains(option)) {
+            if (optionText.toLowerCase().contains(option.toLowerCase())) {
                 prnt.click();
                 break;
             }
