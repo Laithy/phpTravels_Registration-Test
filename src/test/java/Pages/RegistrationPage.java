@@ -62,14 +62,17 @@ public class RegistrationPage {
     private WebElement captchaBorderWE () {
         return driver.findElement(By.xpath("//iframe[@title='reCAPTCHA']"));
     }
-    private WebElement captchaCheckboxWE () {
-        return driver.findElement(By.xpath("//div[@class='recaptcha-checkbox-border']"));
+    private By captchaCheckboxWE () {
+        return By.xpath("//div[@class='recaptcha-checkbox-border']");
     }
     private By signupButtonWE () {
         return By.cssSelector("#submitBTN");
     }
-    private WebElement messageBoxWE () {
-        return driver.findElement(By.xpath("rounded border p-3 text-center pt-5 pb-5 bg-light"));
+    private By messageBoxWE () {
+        return By.xpath("//div[@class='contaier mt-5 mb-5']");
+    }
+    private By errorMidMsgWE () {
+        return By.xpath("//div[@class='vt-col bottom-center']");
     }
 
     //Actions
@@ -93,18 +96,27 @@ public class RegistrationPage {
         selectOption(countyMenuWE(), country);
     }
     public void clickCaptcha () {
+
         driver.switchTo().frame(captchaBorderWE());
-        captchaCheckboxWE().click();
+        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebElement captchaCheckbox = wait.until(ExpectedConditions.elementToBeClickable(captchaCheckboxWE()));
+        captchaCheckbox.click();
         driver.switchTo().defaultContent();
     }
     public void clickSignup () {
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait = new WebDriverWait(driver, Duration.ofSeconds(20)); //Solving captcha timeout
         WebElement button = wait.until(ExpectedConditions.elementToBeClickable(signupButtonWE()));
-        System.out.println(button.getText());
         button.click();
     }
-    public String getMessage () {
-        return messageBoxWE().getText();
+    public String getSuccessMessage () {
+        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebElement message = wait.until(ExpectedConditions.visibilityOfElementLocated(messageBoxWE()));
+        return message.getText();
+    }
+    public String getErrorMessage () {
+        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebElement message = wait.until(ExpectedConditions.visibilityOfElementLocated(errorMidMsgWE()));
+        return message.getText();
     }
 
 }

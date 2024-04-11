@@ -29,7 +29,6 @@ public class RegistrationStepDefinition {
     public void siteNavigation (String website) throws InterruptedException {
         driver.navigate().to(website);
         driver.manage().window().maximize();
-        Thread.sleep(5000);
         String currentWebsite = driver.getCurrentUrl();
         Assert.assertTrue(currentWebsite.contains(website),"Website isn't right");
     }
@@ -43,7 +42,7 @@ public class RegistrationStepDefinition {
         regPage.enterLastName(lastName);
     }
     @And("Picks his home country \"(.*)\"$")
-    public void select_country (String country) throws InterruptedException {
+    public void select_country (String country) {
         regPage.selectCountry(country);
     }
     @And("Enters his Mobile number \"(.*)\"$")
@@ -59,23 +58,30 @@ public class RegistrationStepDefinition {
         regPage.enterPassword(password);
     }
     @And("Check the captcha box")
-    public void click_captcha () throws InterruptedException {
+    public void click_captcha () {
         regPage.clickCaptcha();
     }
     @And("Press the Signup button")
-    public void click_signup () throws InterruptedException {
+    public void click_signup () {
         regPage.clickSignup();
     }
 
     @Then("User should see a success msg \"(.*)\"$")
     public void check_msg (String message) {
-        soft.assertTrue(regPage.getMessage().contains(message));
+        System.out.println("Captured text is "+regPage.getSuccessMessage());
+        soft.assertTrue(regPage.getSuccessMessage().contains(message));
+    }
+    @Then("User should see a error msg \"(.*)\"$")
+    public void check_error_msg (String message) {
+        System.out.println("Captured text is "+ regPage.getErrorMessage());
+        soft.assertTrue(regPage.getErrorMessage().contains(message));
     }
     @And("Close the browser")
     public void close_driver () throws InterruptedException {
         Thread.sleep(2000);
-        soft.assertAll();
+
         driver.quit();
+        soft.assertAll();
     }
 
 }
