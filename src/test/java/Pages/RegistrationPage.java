@@ -3,13 +3,16 @@ package Pages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.time.Duration;
 import java.util.List;
 
 public class RegistrationPage {
 
     WebDriver driver;
+    WebDriverWait wait;
 
     //Constructor
     public RegistrationPage (WebDriver mainDriver){
@@ -24,17 +27,17 @@ public class RegistrationPage {
     }
 
     //Dropdown menu Actions
-    private void selectOption (WebElement wbButton, List<WebElement> wb , String option) {
-        for (WebElement prnt : wb){
-            String optionText = prnt.getText();
+    private void selectOption ( List<WebElement> wb , String option) {
+        for (WebElement element : wb){
+            String optionText = element.getText();
             if (optionText.toLowerCase().contains(option.toLowerCase())) {
-                prnt.click();
+                element.click();
                 break;
             }
         }
     }
 
-    //Text fields
+    //Locators
     private WebElement firstNameWE() {
         return driver.findElement(By.cssSelector("input[id=firstname]"));
     }
@@ -56,8 +59,20 @@ public class RegistrationPage {
     private List<WebElement> countyMenuWE () {
         return driver.findElements(By.xpath("//a[@class='dropdown-item']"));
     }
+    private WebElement captchaBorderWE () {
+        return driver.findElement(By.xpath("//iframe[@title='reCAPTCHA']"));
+    }
+    private WebElement captchaCheckboxWE () {
+        return driver.findElement(By.xpath("//div[@class='recaptcha-checkbox-border']"));
+    }
+    private By signupButtonWE () {
+        return By.cssSelector("#submitBTN");
+    }
+    private WebElement messageBoxWE () {
+        return driver.findElement(By.xpath("rounded border p-3 text-center pt-5 pb-5 bg-light"));
+    }
 
-
+    //Actions
     public void enterFirstName (String firstName) {
         enterText(firstNameWE(),firstName);
     }
@@ -75,7 +90,21 @@ public class RegistrationPage {
     }
     public void selectCountry (String country) {
         countryMenuButtonWE().click();
-        selectOption(countryMenuButtonWE(), countyMenuWE(), country);
+        selectOption(countyMenuWE(), country);
+    }
+    public void clickCaptcha () {
+        driver.switchTo().frame(captchaBorderWE());
+        captchaCheckboxWE().click();
+        driver.switchTo().defaultContent();
+    }
+    public void clickSignup () {
+        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebElement button = wait.until(ExpectedConditions.elementToBeClickable(signupButtonWE()));
+        System.out.println(button.getText());
+        button.click();
+    }
+    public String getMessage () {
+        return messageBoxWE().getText();
     }
 
 }

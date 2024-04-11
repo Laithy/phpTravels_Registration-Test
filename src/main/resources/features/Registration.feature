@@ -13,7 +13,7 @@ Feature: User should be able to make a new account
     And Enters his Mobile number "01116628978"
     And Enters his valid email "Mahmoudelaithy@gmail.com" in the email field
     And Enters his valid password "A123456a" in the password field
-#    And Check the captcha box
-#    And Press the Signup button
+    And Check the captcha box
+    And Press the Signup button
 #    Then User should see a success msg "Your account has been created"
     And Close the browser

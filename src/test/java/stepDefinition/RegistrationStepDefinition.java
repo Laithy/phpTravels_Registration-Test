@@ -3,16 +3,18 @@ package stepDefinition;
 import Pages.RegistrationPage;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
+import org.testng.asserts.SoftAssert;
 
 public class RegistrationStepDefinition {
 
     WebDriver driver = null;
     RegistrationPage regPage;
+    SoftAssert soft ;
 
     @Given("The user opens the browser")
     public void init_driver (){
@@ -21,12 +23,13 @@ public class RegistrationStepDefinition {
         System.setProperty("webDriver.chrome.driver",chromePath);
         driver = new ChromeDriver();
         regPage = new RegistrationPage(driver);
+        soft = new SoftAssert();
     }
     @And("Navigates to the site \"(.*)\"$")
     public void siteNavigation (String website) throws InterruptedException {
         driver.navigate().to(website);
         driver.manage().window().maximize();
-        Thread.sleep(1000);
+        Thread.sleep(5000);
         String currentWebsite = driver.getCurrentUrl();
         Assert.assertTrue(currentWebsite.contains(website),"Website isn't right");
     }
@@ -55,10 +58,23 @@ public class RegistrationStepDefinition {
     public void enter_password (String password) {
         regPage.enterPassword(password);
     }
+    @And("Check the captcha box")
+    public void click_captcha () throws InterruptedException {
+        regPage.clickCaptcha();
+    }
+    @And("Press the Signup button")
+    public void click_signup () throws InterruptedException {
+        regPage.clickSignup();
+    }
 
+    @Then("User should see a success msg \"(.*)\"$")
+    public void check_msg (String message) {
+        soft.assertTrue(regPage.getMessage().contains(message));
+    }
     @And("Close the browser")
     public void close_driver () throws InterruptedException {
         Thread.sleep(2000);
+        soft.assertAll();
         driver.quit();
     }
 
