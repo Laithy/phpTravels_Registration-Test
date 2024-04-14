@@ -130,11 +130,13 @@ public class RegistrationStepDefinition {
     }
     @After
     public void close_driver (Scenario scenario) {
-        System.out.println("we made it here");
+
+        String scenarioName = scenario.getName();
+
         if (scenario.isFailed()){
             TakesScreenshot takescreenshot = (TakesScreenshot) driver;
             byte[] screenShot = takescreenshot.getScreenshotAs(OutputType.BYTES);
-            scenario.attach(screenShot,"image/png","failureScreenshot");
+            scenario.attach(screenShot,"image/png",scenarioName+"_failureScrnshot");
         }
         driver.quit();
     }

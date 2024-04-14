@@ -98,7 +98,7 @@ public class RegistrationPage {
     public void clickCaptcha () {
 
         driver.switchTo().frame(captchaBorderWE());
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait = new WebDriverWait(driver, Duration.ofSeconds(20));
         WebElement captchaCheckbox = wait.until(ExpectedConditions.elementToBeClickable(captchaCheckboxWE()));
         captchaCheckbox.click();
         driver.switchTo().defaultContent();
