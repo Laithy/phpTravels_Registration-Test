@@ -1,10 +1,15 @@
 package stepDefinition;
 
 import Pages.RegistrationPage;
+import io.cucumber.java.After;
+import io.cucumber.java.Before;
+import io.cucumber.java.Scenario;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
@@ -17,7 +22,7 @@ public class RegistrationStepDefinition {
     SoftAssert soft ;
     String firstName;
 
-    @Given("The user opens the browser")
+    @Before
     public void init_driver (){
         //Creating Driver
         String chromePath = System.getProperty("user.dir") + "\\src\\main\\resources\\chromedriver.exe";
@@ -26,7 +31,7 @@ public class RegistrationStepDefinition {
         regPage = new RegistrationPage(driver);
         soft = new SoftAssert();
     }
-    @And("Navigates to the site \"(.*)\"$")
+    @Given("Navigates to the site \"(.*)\"$")
     public void siteNavigation (String website) {
         driver.navigate().to(website);
         driver.manage().window().maximize();
@@ -119,12 +124,19 @@ public class RegistrationStepDefinition {
         soft.assertTrue(regPage.getErrorMessage().contains(message) ,
                 "==> Error message isn't displayed");
     }
-    @And("Close the browser")
-    public void close_driver () throws InterruptedException {
-        Thread.sleep(2000);
-
-        driver.quit();
+    @And("Verify assertions")
+    public void verify_assertions () {
         soft.assertAll();
+    }
+    @After
+    public void close_driver (Scenario scenario) {
+        System.out.println("we made it here");
+        if (scenario.isFailed()){
+            TakesScreenshot takescreenshot = (TakesScreenshot) driver;
+            byte[] screenShot = takescreenshot.getScreenshotAs(OutputType.BYTES);
+            scenario.attach(screenShot,"image/png","failureScreenshot");
+        }
+        driver.quit();
     }
 
 }
