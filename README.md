@@ -25,3 +25,7 @@ The code automates the entire registration process except for one step: reCAPTCH
 - Test run statistics
 - Data about the run
 - Screenshots of failed scenarios (not supported by native Cucumber reporting)
+
+### Test Design
+
+I have designed some test cases for this feature to ensure its quality and compliance with the requirements provided, and I have implemented three of them in the test script for the sake of demonstration, the rest of the test cases can be found here: https://docs.google.com/spreadsheets/d/1S4TKAYfu1QqzJsGzWqt-_QrWh-FX_CKAa-pwSxdVAWk/edit?usp=sharing
